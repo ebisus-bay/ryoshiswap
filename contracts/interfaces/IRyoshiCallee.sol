@@ -2,8 +2,8 @@
 
 pragma solidity =0.8.4;
 
-interface IUniswapV2Callee {
-    function uniswapV2Call(
+interface IRyoshiCallee {
+    function RyoshiCall(
         address sender,
         uint256 amount0,
         uint256 amount1,
