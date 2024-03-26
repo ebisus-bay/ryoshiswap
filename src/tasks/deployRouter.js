@@ -17,7 +17,7 @@ async function main() {
     console.log("Router deployed to:", routerAddress);
 
     console.log("Verifying Router contract");
-    await delay(7000);
+    await delay(15000);
     await hre.run("verify:verify", {
         address: routerAddress,
         constructorArguments: [factoryAddress, wcroAddress],

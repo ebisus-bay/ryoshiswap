@@ -60,7 +60,7 @@ describe("RyoshiFactory", () => {
     const pair = await ethers.getContractFactory("RyoshiPair");
     expect(ethers.keccak256(pair.bytecode)).to.be.eq(codehash);
     expect(codehash).to.be.eq(
-      "0xe3b076add5bc4a6f6aed211804af39a43a7dcbefb44e088e699348c0a8e96fab",
+      "0x347deace88ba101bfe81fb4a9b4306e0a67b3d6d354f8da19b7ed90cee4b7016",
     );
   });
 

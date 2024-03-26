@@ -19,7 +19,7 @@ async function main() {
     await factory.setDefaultFee(15);
     
     console.log("Verifying Factory contract");
-    await delay(7000);
+    await delay(15000);
     await hre.run("verify:verify", {
         address: factoryAddress,
         constructorArguments: [signerAddress],

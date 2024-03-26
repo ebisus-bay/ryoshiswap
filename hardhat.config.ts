@@ -25,9 +25,9 @@ const config: HardhatUserConfig = {
       url : "https://rpc.ebisusbay.biz/",
       chainId : 338,
       accounts:  process.env.SIGNER !== undefined ? [process.env.SIGNER] : [],
-      factory : '0x48fcc39b4249fdd6e1829d54fc30fa809ebb473f',
+      factory : '0x6202A2640a092229B770A82be719aF610e4C5719',
       wcro: '0x467604E174c87042fcc4412c5BC70AaBc8733016',
-      router : '0x29c852d866957c029B616c3013D3D015df32A6C7'
+      router : '0x610a6717EDC11A62A3BaA81bb88Da9637D23f90C'
 
       // useLedger: false,
     }

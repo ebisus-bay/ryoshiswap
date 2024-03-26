@@ -5,8 +5,8 @@ pragma solidity =0.8.4;
 import {IRyoshiERC20} from "./interfaces/IRyoshiERC20.sol";
 
 contract RyoshiERC20 is IRyoshiERC20 {
-    string public constant override name = "Uniswap V2";
-    string public constant override symbol = "UNI-V2";
+    string public constant override name = "Ryoshi LPs";
+    string public constant override symbol = "RYOSHI-LP";
     uint8 public constant override decimals = 18;
     uint256 public override totalSupply;
     mapping(address => uint256) public override balanceOf;
