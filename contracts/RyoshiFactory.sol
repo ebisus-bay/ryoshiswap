@@ -12,6 +12,7 @@ contract RyoshiFactory is IRyoshiFactory {
 
     address public override feeTo;
     address public override feeToSetter;
+    uint32 public override swapFee = 30; // 0.3% default 
 
     mapping(address => mapping(address => address)) public override getPair;
     address[] public override allPairs;
@@ -46,22 +47,36 @@ contract RyoshiFactory is IRyoshiFactory {
         IRyoshiPair(pair).initialize(token0, token1);
         getPair[token0][token1] = pair;
         getPair[token1][token0] = pair; // populate mapping in the reverse direction
+        RyoshiPair(pair).setSwapFee(swapFee);
         allPairs.push(pair);
         emit PairCreated(token0, token1, pair, allPairs.length);
     }
 
     function setFeeTo(address _feeTo) external override {
         require(msg.sender == feeToSetter, "Ryoshi: FORBIDDEN");
+        emit FeeToChanged(feeTo, _feeTo);
         feeTo = _feeTo;
     }
 
     function setFeeToSetter(address _feeToSetter) external override {
         require(msg.sender == feeToSetter, "Ryoshi: FORBIDDEN");
+        emit FeeSetterChanged(feeToSetter, _feeToSetter);
         feeToSetter = _feeToSetter;
+    }
+
+    function setDefaultFee(uint32 _swapFee) external  {
+        require(msg.sender == feeToSetter, "Ryoshi: FORBIDDEN");
+        require(_swapFee > 0, "RyoshiPair: lower then 0");
+        require(_swapFee <= 100, 'RyoshiPair: FORBIDDEN_FEE');
+        swapFee = _swapFee;
+        emit DefaultFeeChanged(swapFee, _swapFee);
     }
 
     function setSwapFee(address _pair, uint32 _swapFee) external override{
         require(msg.sender == feeToSetter, 'Ryoshi: FORBIDDEN');
+        require(_swapFee > 0, "RyoshiPair: lower then 0");
+        require(_swapFee <= 100, 'RyoshiPair: FORBIDDEN_FEE');
         RyoshiPair(_pair).setSwapFee(_swapFee);
+        emit SwapFeeChanged(_pair, swapFee, _swapFee);
     }
 }

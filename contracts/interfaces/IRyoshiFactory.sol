@@ -10,9 +10,16 @@ interface IRyoshiFactory {
         uint256
     );
 
+    event FeeSetterChanged(address indexed oldSetter, address indexed newSetter);
+    event FeeToChanged(address indexed oldFeeTo, address indexed newFeeTo);
+    event SwapFeeChanged(address indexed pair, uint32 oldSwapFee, uint32 newSwapFee);
+    event DefaultFeeChanged(uint32 oldSwapFee, uint32 newSwapFee);
+
     function feeTo() external view returns (address);
 
     function feeToSetter() external view returns (address);
+
+    function swapFee() external view returns (uint32);
 
     function getPair(
         address tokenA,
