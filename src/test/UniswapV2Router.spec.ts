@@ -514,50 +514,33 @@ describe("RyoshiRouter", () => {
 
       await token0.approve(await router02.getAddress(), ethers.MaxUint256);
 
-     let pairAddress = await pair.getAddress();
-      let token0Address = await token0.getAddress();
-      let token1Address = await token1.getAddress();
-      let walletAddress = wallet.address;
-      let ethersMaxUint256 = ethers.MaxUint256;
-      let routerAddress = await router02.getAddress();
-
-      let tx =  router02.swapExactTokensForTokens(
-        swapAmount,
-        0,
-        [await token0.getAddress(), await token1.getAddress()],
-        wallet.address,
-        ethers.MaxUint256,
-      );
-
-      let response = (await tx).wait();
-      console.log(response);
-      // await expect(
-      //   router02.swapExactTokensForTokens(
-      //     swapAmount,
-      //     0,
-      //     [await token0.getAddress(), await token1.getAddress()],
-      //     wallet.address,
-      //     ethers.MaxUint256,
-      //   ),
-      // )
-        // .to.emit(token0, "Transfer")
-        // .withArgs(wallet.address, await pair.getAddress(), swapAmount)
-        // .to.emit(token1, "Transfer")
-        // .withArgs(await pair.getAddress(), wallet.address, expectedOutputAmount)
-        // .to.emit(pair, "Sync")
-        // .withArgs(
-        //   token0Amount + swapAmount,
-        //   token1Amount - expectedOutputAmount,
-        // )
-        // .to.emit(pair, "Swap")
-        // .withArgs(
-        //   await router02.getAddress(),
-        //   swapAmount,
-        //   0,
-        //   0,
-        //   expectedOutputAmount,
-        //   wallet.address,
-        // );
+      await expect(
+        router02.swapExactTokensForTokens(
+          swapAmount,
+          0,
+          [await token0.getAddress(), await token1.getAddress()],
+          wallet.address,
+          ethers.MaxUint256,
+        ),
+      )
+        .to.emit(token0, "Transfer")
+        .withArgs(wallet.address, await pair.getAddress(), swapAmount)
+        .to.emit(token1, "Transfer")
+        .withArgs(await pair.getAddress(), wallet.address, expectedOutputAmount)
+        .to.emit(pair, "Sync")
+        .withArgs(
+          token0Amount + swapAmount,
+          token1Amount - expectedOutputAmount,
+        )
+        .to.emit(pair, "Swap")
+        .withArgs(
+          await router02.getAddress(),
+          swapAmount,
+          0,
+          0,
+          expectedOutputAmount,
+          wallet.address,
+        );
     });
 
     it("amounts", async () => {
@@ -613,7 +596,7 @@ describe("RyoshiRouter", () => {
         ethers.MaxUint256,
       );
       const receipt = await tx.wait();
-      expect(receipt!.gasUsed).to.eq(101097, "gas used");
+      expect(receipt!.gasUsed).to.eq(103420, "gas used");
     });
   });
 
@@ -842,7 +825,7 @@ describe("RyoshiRouter", () => {
         },
       );
       const receipt = await tx.wait();
-      expect(receipt!.gasUsed).to.eq(138689, "gas used");
+      expect(receipt!.gasUsed).to.eq(141012, "gas used");
     }).retries(3);
   });
 

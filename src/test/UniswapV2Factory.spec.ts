@@ -60,7 +60,7 @@ describe("RyoshiFactory", () => {
     const pair = await ethers.getContractFactory("RyoshiPair");
     expect(ethers.keccak256(pair.bytecode)).to.be.eq(codehash);
     expect(codehash).to.be.eq(
-      "0xa6f7da614a9a7a714d480af52bdaab3ae3ffcc42463f92a8b3e33d9d65f0ab51",
+      "0xd0ce08d540c2c4b6b1d5afa363c067477812026af008f6b82d7cc1ae040c2e3e",
     );
   });
 
@@ -81,7 +81,7 @@ describe("RyoshiFactory", () => {
     const { factory } = await loadFixture(fixture);
     const tx = await factory.createPair(...TEST_ADDRESSES);
     const receipt = await tx.wait();
-    expect(receipt!.gasUsed).to.eq(2349095);
+    expect(receipt!.gasUsed).to.eq(2342154);
   });
 
   it("setFeeTo", async () => {

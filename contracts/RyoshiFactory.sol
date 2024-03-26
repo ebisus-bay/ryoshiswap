@@ -59,4 +59,9 @@ contract RyoshiFactory is IRyoshiFactory {
         require(msg.sender == feeToSetter, "Ryoshi: FORBIDDEN");
         feeToSetter = _feeToSetter;
     }
+
+    function setSwapFee(address _pair, uint32 _swapFee) external override{
+        require(msg.sender == feeToSetter, 'Ryoshi: FORBIDDEN');
+        RyoshiPair(_pair).setSwapFee(_swapFee);
+    }
 }

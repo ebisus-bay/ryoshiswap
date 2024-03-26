@@ -26,6 +26,7 @@ contract RyoshiPair is IRyoshiPair, RyoshiERC20 {
     uint256 public override price0CumulativeLast;
     uint256 public override price1CumulativeLast;
     uint256 public override kLast; // reserve0 * reserve1, as of immediately after the most recent liquidity event
+    uint32 public swapFee = 30; // uses 0.30% default
 
     uint256 private unlocked = 1;
     modifier lock() {
@@ -69,6 +70,13 @@ contract RyoshiPair is IRyoshiPair, RyoshiERC20 {
         require(msg.sender == factory, "Ryoshi: FORBIDDEN"); // sufficient check
         token0 = _token0;
         token1 = _token1;
+    }
+
+    function setSwapFee(uint32 _swapFee) external {
+        require(_swapFee > 0, "RyoshiPair: lower then 0");
+        require(msg.sender == factory, 'RyoshiPair: FORBIDDEN');
+        require(_swapFee <= 1000, 'RyoshiPair: FORBIDDEN_FEE');
+        swapFee = _swapFee;
     }
 
     // update reserves and, on the first call per block, price accumulators
@@ -232,11 +240,11 @@ contract RyoshiPair is IRyoshiPair, RyoshiERC20 {
         );
         {
             // scope for reserve{0,1}Adjusted, avoids stack too deep errors
-            uint256 balance0Adjusted = balance0 * 1000 - amount0In * 3;
-            uint256 balance1Adjusted = balance1 * 1000 - amount1In * 3;
+            uint256 balance0Adjusted = balance0 * 10000 - amount0In * swapFee;
+            uint256 balance1Adjusted = balance1 * 10000 - amount1In * swapFee;
             require(
                 balance0Adjusted * balance1Adjusted >=
-                    uint256(_reserve0) * _reserve1 * 1e6,
+                    uint256(_reserve0) * _reserve1 * 10000 ** 2,
                 "Ryoshi: K"
             );
         }

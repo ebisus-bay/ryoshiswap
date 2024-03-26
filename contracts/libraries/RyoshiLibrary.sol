@@ -34,7 +34,7 @@ library RyoshiLibrary {
                             bytes1(0xff),
                             factory,
                             keccak256(abi.encodePacked(token0, token1)),
-                            hex"a6f7da614a9a7a714d480af52bdaab3ae3ffcc42463f92a8b3e33d9d65f0ab51" // init code hash
+                            hex"d0ce08d540c2c4b6b1d5afa363c067477812026af008f6b82d7cc1ae040c2e3e" // init code hash
                         )
                     )
                 )
