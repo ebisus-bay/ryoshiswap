@@ -8,9 +8,9 @@ import {
   MINIMUM_LIQUIDITY,
   UniswapVersion,
 } from "./shared/utilities";
-import { UniswapV2Pair } from "../../typechain-types";
+import { RyoshiPair } from "../../typechain-types";
 
-describe("UniswapV2Router", () => {
+describe("RyoshiRouter", () => {
   async function v2Fixture() {
     const [wallet] = await ethers.getSigners();
     const token = await ethers.getContractFactory("ERC20");
@@ -26,7 +26,7 @@ describe("UniswapV2Router", () => {
     const WETHPartner = await erc20.deploy(expandTo18Decimals(10000));
 
     // deploy V2
-    const v2factory = await ethers.getContractFactory("UniswapV2Factory");
+    const v2factory = await ethers.getContractFactory("RyoshiFactory");
     const factoryV2 = await v2factory.deploy(wallet.address);
     const routerEmit = await ethers.getContractFactory("RouterEventEmitter");
 
@@ -41,14 +41,14 @@ describe("UniswapV2Router", () => {
       ]);
 
     // deploy routers
-    const router = await ethers.getContractFactory("UniswapV2Router");
+    const router = await ethers.getContractFactory("RyoshiRouter");
     const router02 = await router.deploy(factoryV2Address, WETHAddress);
 
     // initialize V2
     await factoryV2.createPair(tokenAAddress, tokenBAddress);
     const pairAddress = await factoryV2.getPair(tokenAAddress, tokenBAddress);
-    const pairFactory = await ethers.getContractFactory("UniswapV2Pair");
-    const pair = (await pairFactory.attach(pairAddress)) as UniswapV2Pair;
+    const pairFactory = await ethers.getContractFactory("RyoshiPair");
+    const pair = (await pairFactory.attach(pairAddress)) as RyoshiPair;
 
     const token0Address = await pair.token0();
     const token0 = tokenAAddress === token0Address ? tokenA : tokenB;
@@ -85,13 +85,13 @@ describe("UniswapV2Router", () => {
     expect(await router.quote(1n, 100n, 200n)).to.eq(2n);
     expect(await router.quote(2n, 200n, 100n)).to.eq(1n);
     await expect(router.quote(0n, 100n, 200n)).to.be.revertedWith(
-      "UniswapV2Library: INSUFFICIENT_AMOUNT",
+      "RyoshiLibrary: INSUFFICIENT_AMOUNT",
     );
     await expect(router.quote(1n, 0n, 200n)).to.be.revertedWith(
-      "UniswapV2Library: INSUFFICIENT_LIQUIDITY",
+      "RyoshiLibrary: INSUFFICIENT_LIQUIDITY",
     );
     await expect(router.quote(1n, 100n, 0n)).to.be.revertedWith(
-      "UniswapV2Library: INSUFFICIENT_LIQUIDITY",
+      "RyoshiLibrary: INSUFFICIENT_LIQUIDITY",
     );
   });
 
@@ -100,13 +100,13 @@ describe("UniswapV2Router", () => {
 
     expect(await router.getAmountOut(2n, 100n, 100n)).to.eq(1n);
     await expect(router.getAmountOut(0n, 100n, 100n)).to.be.revertedWith(
-      "UniswapV2Library: INSUFFICIENT_INPUT_AMOUNT",
+      "RyoshiLibrary: INSUFFICIENT_INPUT_AMOUNT",
     );
     await expect(router.getAmountOut(2n, 0n, 100n)).to.be.revertedWith(
-      "UniswapV2Library: INSUFFICIENT_LIQUIDITY",
+      "RyoshiLibrary: INSUFFICIENT_LIQUIDITY",
     );
     await expect(router.getAmountOut(2n, 100n, 0n)).to.be.revertedWith(
-      "UniswapV2Library: INSUFFICIENT_LIQUIDITY",
+      "RyoshiLibrary: INSUFFICIENT_LIQUIDITY",
     );
   });
 
@@ -115,13 +115,13 @@ describe("UniswapV2Router", () => {
 
     expect(await router.getAmountIn(1n, 100n, 100n)).to.eq(2n);
     await expect(router.getAmountIn(0n, 100n, 100n)).to.be.revertedWith(
-      "UniswapV2Library: INSUFFICIENT_OUTPUT_AMOUNT",
+      "RyoshiLibrary: INSUFFICIENT_OUTPUT_AMOUNT",
     );
     await expect(router.getAmountIn(1n, 0n, 100n)).to.be.revertedWith(
-      "UniswapV2Library: INSUFFICIENT_LIQUIDITY",
+      "RyoshiLibrary: INSUFFICIENT_LIQUIDITY",
     );
     await expect(router.getAmountIn(1n, 100n, 0n)).to.be.revertedWith(
-      "UniswapV2Library: INSUFFICIENT_LIQUIDITY",
+      "RyoshiLibrary: INSUFFICIENT_LIQUIDITY",
     );
   });
 
@@ -148,7 +148,7 @@ describe("UniswapV2Router", () => {
 
     await expect(
       router.getAmountsOut(2n, [await token0.getAddress()]),
-    ).to.be.revertedWith("UniswapV2Library: INVALID_PATH");
+    ).to.be.revertedWith("RyoshiLibrary: INVALID_PATH");
     const path = [await token0.getAddress(), await token1.getAddress()];
     expect(await router.getAmountsOut(2n, path)).to.deep.eq([2n, 1n]);
   });
@@ -176,7 +176,7 @@ describe("UniswapV2Router", () => {
 
     await expect(
       router.getAmountsIn(1n, [await token0.getAddress()]),
-    ).to.be.revertedWith("UniswapV2Library: INVALID_PATH");
+    ).to.be.revertedWith("RyoshiLibrary: INVALID_PATH");
     const path = [await token0.getAddress(), await token1.getAddress()];
     expect(await router.getAmountsIn(1n, path)).to.deep.eq([2n, 1n]);
   });
@@ -505,6 +505,7 @@ describe("UniswapV2Router", () => {
     it("happy path", async () => {
       const { router02, token0, token1, wallet, pair } =
         await loadFixture(v2Fixture);
+  
 
       // before each
       await token0.transfer(await pair.getAddress(), token0Amount);
@@ -595,7 +596,7 @@ describe("UniswapV2Router", () => {
         ethers.MaxUint256,
       );
       const receipt = await tx.wait();
-      expect(receipt!.gasUsed).to.eq(101097, "gas used");
+      expect(receipt!.gasUsed).to.eq(103420, "gas used");
     });
   });
 
@@ -824,7 +825,7 @@ describe("UniswapV2Router", () => {
         },
       );
       const receipt = await tx.wait();
-      expect(receipt!.gasUsed).to.eq(138689, "gas used");
+      expect(receipt!.gasUsed).to.eq(141012, "gas used");
     }).retries(3);
   });
 

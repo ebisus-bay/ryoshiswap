@@ -7,7 +7,7 @@ import { expandTo18Decimals, UniswapVersion } from "./shared/utilities";
 const TOTAL_SUPPLY = expandTo18Decimals(10000);
 const TEST_AMOUNT = expandTo18Decimals(10);
 
-describe("UniswapV2ERC20", () => {
+describe("RyoshiERC20", () => {
   async function fixture() {
     const factory = await ethers.getContractFactory("ERC20");
     const token = await factory.deploy(TOTAL_SUPPLY);
@@ -18,8 +18,8 @@ describe("UniswapV2ERC20", () => {
   it("name, symbol, decimals, totalSupply, balanceOf, DOMAIN_SEPARATOR, PERMIT_TYPEHASH", async () => {
     const { token, wallet } = await loadFixture(fixture);
     const name = await token.name();
-    expect(name).to.eq("Uniswap V2");
-    expect(await token.symbol()).to.eq("UNI-V2");
+    expect(name).to.eq("Ryoshi LPs");
+    expect(await token.symbol()).to.eq("RYOSHI-LP");
     expect(await token.decimals()).to.eq(18);
     expect(await token.totalSupply()).to.eq(TOTAL_SUPPLY);
     expect(await token.balanceOf(wallet.address)).to.eq(TOTAL_SUPPLY);

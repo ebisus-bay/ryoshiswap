@@ -2,7 +2,7 @@
 
 pragma solidity =0.8.4;
 
-interface IUniswapV2Factory {
+interface IRyoshiFactory {
     event PairCreated(
         address indexed token0,
         address indexed token1,
@@ -10,9 +10,16 @@ interface IUniswapV2Factory {
         uint256
     );
 
+    event FeeSetterChanged(address indexed oldSetter, address indexed newSetter);
+    event FeeToChanged(address indexed oldFeeTo, address indexed newFeeTo);
+    event SwapFeeChanged(address indexed pair, uint32 oldSwapFee, uint32 newSwapFee);
+    event DefaultFeeChanged(uint32 oldSwapFee, uint32 newSwapFee);
+
     function feeTo() external view returns (address);
 
     function feeToSetter() external view returns (address);
+
+    function swapFee() external view returns (uint32);
 
     function getPair(
         address tokenA,
@@ -31,4 +38,5 @@ interface IUniswapV2Factory {
     function setFeeTo(address) external;
 
     function setFeeToSetter(address) external;
+    function setSwapFee(address pair, uint32 swapFee) external;
 }

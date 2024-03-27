@@ -2,11 +2,11 @@
 
 pragma solidity =0.8.4;
 
-import {IUniswapV2ERC20} from "./interfaces/IUniswapV2ERC20.sol";
+import {IRyoshiERC20} from "./interfaces/IRyoshiERC20.sol";
 
-contract UniswapV2ERC20 is IUniswapV2ERC20 {
-    string public constant override name = "Uniswap V2";
-    string public constant override symbol = "UNI-V2";
+contract RyoshiERC20 is IRyoshiERC20 {
+    string public constant override name = "Ryoshi LPs";
+    string public constant override symbol = "RYOSHI-LP";
     uint8 public constant override decimals = 18;
     uint256 public override totalSupply;
     mapping(address => uint256) public override balanceOf;
@@ -92,7 +92,7 @@ contract UniswapV2ERC20 is IUniswapV2ERC20 {
         bytes32 r,
         bytes32 s
     ) external override {
-        require(deadline >= block.timestamp, "UniswapV2: EXPIRED");
+        require(deadline >= block.timestamp, "Ryoshi: EXPIRED");
         bytes32 digest = keccak256(
             abi.encodePacked(
                 "\x19\x01",
@@ -112,7 +112,7 @@ contract UniswapV2ERC20 is IUniswapV2ERC20 {
         address recoveredAddress = ecrecover(digest, v, r, s);
         require(
             recoveredAddress != address(0) && recoveredAddress == owner,
-            "UniswapV2: INVALID_SIGNATURE"
+            "Ryoshi: INVALID_SIGNATURE"
         );
         _approve(owner, spender, value);
     }
