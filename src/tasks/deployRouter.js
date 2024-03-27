@@ -9,7 +9,7 @@ async function main() {
     const factoryAddress = hre.config.networks[hre.network.name].factory;
     const signerAddress = deployer.address;
     console.log("Deploying contracts with the account:", signerAddress);
-    const Router = await hre.ethers.getContractFactory("RyoshiRouter");
+    const Router = (await hre.ethers.getContractFactory("RyoshiRouter")).connect(deployer);
     const router = await Router.deploy(factoryAddress, wcroAddress);
     
     await router.waitForDeployment();

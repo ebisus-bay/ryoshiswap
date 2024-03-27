@@ -1,5 +1,5 @@
 import { HardhatUserConfig } from "hardhat/config";
-
+import "@nomicfoundation/hardhat-ledger";
 import "@nomicfoundation/hardhat-toolbox";
 
 import * as dotenv from "dotenv";
@@ -16,10 +16,13 @@ const config: HardhatUserConfig = {
     cronos : {
       url : "https://rpc.ebisusbay.com/",
       chainId: 25,
-      accounts: process.env.SIGNER !== undefined ? [process.env.SIGNER] : [],
-      // useLedger: true,
-      factory : '',
+      // accounts: process.env.SIGNER !== undefined ? [process.env.SIGNER] : [],
+      ledgerAccounts:[
+        '0x454cfAa623A629CC0b4017aEb85d54C42e91479d'
+      ],
+      factory : '0x5f1D751F447236f486F4268b883782897A902379',
       wcro : '0x5C7F8A570d578ED84E63fdFA7b1eE72dEae1AE23',
+      router : '0xa476c97D8d1ec7D263EAfa0039645DBe0cc0a012'
     },
     testnet_cronos : {
       url : "https://rpc.ebisusbay.biz/",
@@ -28,8 +31,6 @@ const config: HardhatUserConfig = {
       factory : '0x6202A2640a092229B770A82be719aF610e4C5719',
       wcro: '0x467604E174c87042fcc4412c5BC70AaBc8733016',
       router : '0x610a6717EDC11A62A3BaA81bb88Da9637D23f90C'
-
-      // useLedger: false,
     }
   },
   solidity: {

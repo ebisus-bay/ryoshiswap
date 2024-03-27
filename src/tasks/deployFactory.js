@@ -6,8 +6,8 @@ const {delay} = require("./utils");
 async function main() {
     const [deployer] = await hre.ethers.getSigners();
     const signerAddress = deployer.address;
-    console.log("Deploying contracts with the account:", signerAddress);
-    const Factory = await hre.ethers.getContractFactory("RyoshiFactory");
+    console.log("Deploying contracts with the account:", deployer);
+    const Factory = (await hre.ethers.getContractFactory("RyoshiFactory")).connect(deployer);
     const factory = await Factory.deploy(signerAddress);
     
     await factory.waitForDeployment();
