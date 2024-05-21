@@ -98,14 +98,14 @@ describe("RyoshiRouter", () => {
   it("getAmountOut", async () => {
     const { router02: router } = await loadFixture(v2Fixture);
 
-    expect(await router.getAmountOut(2n, 100n, 100n)).to.eq(1n);
-    await expect(router.getAmountOut(0n, 100n, 100n)).to.be.revertedWith(
+    expect(await router.getAmountOut(2n, 100n, 100n, 30n)).to.eq(1n);
+    await expect(router.getAmountOut(0n, 100n, 100n, 30n)).to.be.revertedWith(
       "RyoshiLibrary: INSUFFICIENT_INPUT_AMOUNT",
     );
-    await expect(router.getAmountOut(2n, 0n, 100n)).to.be.revertedWith(
+    await expect(router.getAmountOut(2n, 0n, 100n, 30n)).to.be.revertedWith(
       "RyoshiLibrary: INSUFFICIENT_LIQUIDITY",
     );
-    await expect(router.getAmountOut(2n, 100n, 0n)).to.be.revertedWith(
+    await expect(router.getAmountOut(2n, 100n, 0n, 30n)).to.be.revertedWith(
       "RyoshiLibrary: INSUFFICIENT_LIQUIDITY",
     );
   });
@@ -113,14 +113,14 @@ describe("RyoshiRouter", () => {
   it("getAmountIn", async () => {
     const { router02: router } = await loadFixture(v2Fixture);
 
-    expect(await router.getAmountIn(1n, 100n, 100n)).to.eq(2n);
-    await expect(router.getAmountIn(0n, 100n, 100n)).to.be.revertedWith(
+    expect(await router.getAmountIn(1n, 100n, 100n, 30n)).to.eq(2n);
+    await expect(router.getAmountIn(0n, 100n, 100n, 30n)).to.be.revertedWith(
       "RyoshiLibrary: INSUFFICIENT_OUTPUT_AMOUNT",
     );
-    await expect(router.getAmountIn(1n, 0n, 100n)).to.be.revertedWith(
+    await expect(router.getAmountIn(1n, 0n, 100n, 30n)).to.be.revertedWith(
       "RyoshiLibrary: INSUFFICIENT_LIQUIDITY",
     );
-    await expect(router.getAmountIn(1n, 100n, 0n)).to.be.revertedWith(
+    await expect(router.getAmountIn(1n, 100n, 0n, 30n)).to.be.revertedWith(
       "RyoshiLibrary: INSUFFICIENT_LIQUIDITY",
     );
   });
@@ -596,7 +596,7 @@ describe("RyoshiRouter", () => {
         ethers.MaxUint256,
       );
       const receipt = await tx.wait();
-      expect(receipt!.gasUsed).to.eq(103420, "gas used");
+      expect(receipt!.gasUsed).to.eq(105340, "gas used");
     });
   });
 
@@ -825,7 +825,7 @@ describe("RyoshiRouter", () => {
         },
       );
       const receipt = await tx.wait();
-      expect(receipt!.gasUsed).to.eq(141012, "gas used");
+      expect(receipt!.gasUsed).to.eq(142976, "gas used");
     }).retries(3);
   });
 

@@ -558,7 +558,8 @@ contract RyoshiRouter is IRyoshiRouter {
                 amountOutput = RyoshiLibrary.getAmountOut(
                     amountInput,
                     reserveInput,
-                    reserveOutput
+                    reserveOutput,
+                    pair.swapFee()
                 );
             }
             (uint256 amount0Out, uint256 amount1Out) = input == token0
@@ -653,17 +654,19 @@ contract RyoshiRouter is IRyoshiRouter {
     function getAmountOut(
         uint256 amountIn,
         uint256 reserveIn,
-        uint256 reserveOut
+        uint256 reserveOut,
+        uint256 swapFee
     ) public pure virtual override returns (uint256 amountOut) {
-        return RyoshiLibrary.getAmountOut(amountIn, reserveIn, reserveOut);
+        return RyoshiLibrary.getAmountOut(amountIn, reserveIn, reserveOut, swapFee);
     }
 
     function getAmountIn(
         uint256 amountOut,
         uint256 reserveIn,
-        uint256 reserveOut
+        uint256 reserveOut,
+        uint256 swapFee
     ) public pure virtual override returns (uint256 amountIn) {
-        return RyoshiLibrary.getAmountIn(amountOut, reserveIn, reserveOut);
+        return RyoshiLibrary.getAmountIn(amountOut, reserveIn, reserveOut, swapFee);
     }
 
     function getAmountsOut(

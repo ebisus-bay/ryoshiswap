@@ -75,16 +75,17 @@ library RyoshiLibrary {
     function getAmountOut(
         uint256 amountIn,
         uint256 reserveIn,
-        uint256 reserveOut
+        uint256 reserveOut,
+        uint256 swapFee
     ) internal pure returns (uint256 amountOut) {
         require(amountIn > 0, "RyoshiLibrary: INSUFFICIENT_INPUT_AMOUNT");
         require(
             reserveIn > 0 && reserveOut > 0,
             "RyoshiLibrary: INSUFFICIENT_LIQUIDITY"
         );
-        uint256 amountInWithFee = amountIn * 997;
+        uint256 amountInWithFee = amountIn * (10000 - swapFee);
         uint256 numerator = amountInWithFee * reserveOut;
-        uint256 denominator = reserveIn * 1000 + amountInWithFee;
+        uint256 denominator = reserveIn * 10000 + amountInWithFee;
         amountOut = numerator / denominator;
     }
 
@@ -92,15 +93,16 @@ library RyoshiLibrary {
     function getAmountIn(
         uint256 amountOut,
         uint256 reserveIn,
-        uint256 reserveOut
+        uint256 reserveOut,
+        uint256 swapFee
     ) internal pure returns (uint256 amountIn) {
         require(amountOut > 0, "RyoshiLibrary: INSUFFICIENT_OUTPUT_AMOUNT");
         require(
             reserveIn > 0 && reserveOut > 0,
             "RyoshiLibrary: INSUFFICIENT_LIQUIDITY"
         );
-        uint256 numerator = reserveIn * amountOut * 1000;
-        uint256 denominator = (reserveOut - amountOut) * 997;
+        uint256 numerator = reserveIn * amountOut * 10000;
+        uint256 denominator = (reserveOut - amountOut) * (10000 - swapFee);
         amountIn = numerator / denominator + 1;
     }
 
@@ -119,7 +121,7 @@ library RyoshiLibrary {
                 path[i],
                 path[i + 1]
             );
-            amounts[i + 1] = getAmountOut(amounts[i], reserveIn, reserveOut);
+            amounts[i + 1] = getAmountOut(amounts[i], reserveIn, reserveOut, getSwapFee(factory, path[i], path[i + 1]));
         }
     }
 
@@ -138,7 +140,11 @@ library RyoshiLibrary {
                 path[i - 1],
                 path[i]
             );
-            amounts[i - 1] = getAmountIn(amounts[i], reserveIn, reserveOut);
+            amounts[i - 1] = getAmountIn(amounts[i], reserveIn, reserveOut, getSwapFee(factory, path[i - 1], path[i]));
         }
+    }
+
+    function getSwapFee(address factory, address tokenA, address tokenB) internal view returns (uint swapFee) {
+        swapFee = IRyoshiPair(pairFor(factory, tokenA, tokenB)).swapFee();
     }
 }

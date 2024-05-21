@@ -26,7 +26,7 @@ contract RyoshiPair is IRyoshiPair, RyoshiERC20 {
     uint256 public override price0CumulativeLast;
     uint256 public override price1CumulativeLast;
     uint256 public override kLast; // reserve0 * reserve1, as of immediately after the most recent liquidity event
-    uint32 public swapFee;
+    uint32 public override swapFee;
 
     uint256 private unlocked = 1;
     modifier lock() {
