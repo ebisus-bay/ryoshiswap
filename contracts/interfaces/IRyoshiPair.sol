@@ -59,4 +59,6 @@ interface IRyoshiPair is IRyoshiERC20 {
     function sync() external;
 
     function initialize(address, address) external;
+
+    function swapFee() external view returns (uint32);
 }
