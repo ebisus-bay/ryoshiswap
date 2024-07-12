@@ -4,7 +4,7 @@
 
 // File contracts/libs/Multicall2.sol
 
-pragma solidity =0.8.4;
+pragma solidity =0.8.13;
 pragma experimental ABIEncoderV2;
 
 
