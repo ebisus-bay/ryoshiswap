@@ -9,7 +9,7 @@ export default async function (hre: HardhatRuntimeEnvironment) {
   console.log(`Running deploy script`);
   const deployer = await hre.deployer.getWallet(0);
   const wcro = '0xf9bb37013de8cd3f89b3623af9ee1b1b32d872c9'
-  const factory = '0x519288687016Dd5199F454123F44D5016fF7Dd5a'
+  const factory = '0xbcE43dabc90E475D3c203603782962B85aDC32d4'
   console.log(deployer.address);
   const artifact = await hre.deployer.loadArtifact("RyoshiRouter");
   const factoryContract = await hre.deployer.deploy(artifact, [factory, wcro]);
